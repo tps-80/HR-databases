@@ -21,7 +21,7 @@ module.exports = {
     post: function (params, callback) {
       var queryString = "insert into messages(text, userid, roomname) \
                         values (?, (select id from users where username = ? limit 1), ?)";
-      db.query(queryString, params function(err, results){ //(queryStr, callback)
+      db.query(queryString, params, function(err, results){ //(queryStr, callback)
         if (err) {
           console.log(err)
         } else {
@@ -33,8 +33,27 @@ module.exports = {
 
   users: {
     // Ditto as above.
-    get: function () {},
-    post: function () {}
+    get: function (callback) {
+      var queryString = "select * from users";
+
+      db.query(queryString, function(err, results){
+        if (err) {
+          console.log(err)
+        } else {
+          callback(results);
+        } 
+      });
+    },
+    post: function (params, callback) {
+      var queryString = "insert into users(username) values (?)";
+        db.query(queryString, params, function(err, results){ //(queryStr, callback)
+        if (err) {
+          console.log(err)
+        } else {
+          callback(results);
+        } 
+      });
+    }
   }
 };
 
